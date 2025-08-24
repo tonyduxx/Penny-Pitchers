@@ -129,7 +129,7 @@ canvas {
       </div>
     </div>
 
-    <canvas id="game" width="540" height="880" aria-label="Coin Flip Frenzy Canvas"></canvas>
+    <canvas id="game" width="540" height="880" aria-label="Penny Pinchers"></canvas>
 
     <div class="help">
       <b>How to Play:</b> Move the <span class="kbd">A</span>/<span class="kbd">D</span> keys (or mouse/touch) to aim across the top bar and press
@@ -154,15 +154,15 @@ canvas {
     pegRestitution: 0.86,    // bounciness on pegs
     wallRestitution: 0.7,
     floorRestitution: 0.35,
-    maxPegRows: 10,          // more rows for bigger board
-    pegXSpacing: 90,         // more spacing
-    pegYSpacing: 90,
-    leftPadding: 60,
-    topPadding: 180,
-    jarWidth: 200,           // larger jar
-    jarMouthWidth: 160,
-    jarHeight: 180,
-    jarThick: 18,
+    maxPegRows: 8,          // more rows for bigger board
+    pegXSpacing: 44,         // more spacing
+    pegYSpacing: 48,
+    leftPadding: 28,
+    topPadding: 90,
+    jarWidth: 90,           // larger jar
+    jarMouthWidth: 70,
+    jarHeight: 80,
+    jarThick: 10,
     coinsPerGame: 10,
     jarScore: 15,
     rentGoal: 120,
@@ -856,37 +856,36 @@ canvas {
   }
 
   // ====== RESPONSIVE CANVAS (keeps aspect, crisp physics) ======
-  function resize(){
-    // Larger default canvas for bigger board
-    const targetW = Math.min(820, Math.floor(window.innerWidth - 28));
-    const targetH = Math.floor(targetW * (16/9));
-    const ratio = window.devicePixelRatio || 1;
-    canvas.style.width = targetW + "px";
-    canvas.style.height = targetH + "px";
-    canvas.width = Math.floor(targetW * ratio);
-    canvas.height = Math.floor(targetH * ratio);
-    ctx.setTransform(ratio,0,0,ratio,0,0);
+  function resize() {
+  // Fixed size for all screens, but responsive in container
+  const targetW = 360;
+  const targetH = 540;
+  const ratio = window.devicePixelRatio || 1;
+  canvas.style.width = targetW + "px";
+  canvas.style.height = targetH + "px";
+  canvas.width = Math.floor(targetW * ratio);
+  canvas.height = Math.floor(targetH * ratio);
+  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
 
-    // Rebuild world with new dimensions while preserving HUD stats
-    const saved = {
-      running: state.running,
-      coinsLeft: state.coinsLeft,
-      score: state.score,
-      goal: state.goal,
-      streak: state.streak,
-      muted: state.muted
-    };
-    state.pegs = buildPegs();
-    state.jar = buildJar();
-    state.coins = [];
-    state.particles = [];
-    state.aimX = canvas.width/2;
-
-    Object.assign(state, saved);
-    updateHUD();
-    draw(0);
-  }
-  window.addEventListener("resize", resize);
+  // Rebuild world with new dimensions while preserving HUD stats
+  const saved = {
+    running: state.running,
+    coinsLeft: state.coinsLeft,
+    score: state.score,
+    goal: state.goal,
+    streak: state.streak,
+    muted: state.muted
+  };
+  state.pegs = buildPegs();
+  state.jar = buildJar();
+  state.coins = [];
+  state.particles = [];
+  state.aimX = canvas.width / 2;
+  Object.assign(state, saved);
+  updateHUD();
+  draw(0);
+}
+window.addEventListener("resize", resize);
 
   // ====== INIT ======
   dGoalMax.textContent = cfg.rentGoal;
