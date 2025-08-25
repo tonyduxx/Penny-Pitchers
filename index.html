@@ -69,7 +69,7 @@ canvas {
   width: 100%;
   max-width: 360px;
   height: auto;
-  aspect-ratio: 3/3;
+  aspect-ratio: 2/3;
   border-radius: 16px;
   background: linear-gradient(180deg, #0b1025, #090d1e 38%, #070a16);
   border: 1px solid #222647;
@@ -129,7 +129,7 @@ canvas {
       </div>
     </div>
 
-    <canvas id="game" width="540" height="880" aria-label="Penny Pinchers"></canvas>
+    <canvas id="game" width="360" height="540" aria-label="Penny Pinchers"></canvas>
 
     <div class="help">
       <b>How to Play:</b> Move the <span class="kbd">A</span>/<span class="kbd">D</span> keys (or mouse/touch) to aim across the top bar and press
@@ -147,32 +147,32 @@ canvas {
 (() => {
   // ====== CONFIG ======
   const cfg = {
-    gravity: 1700,           // px/s^2
-    air: 0.000,              // air drag per second (kept near zero for snappy feel)
-    coinRadius: 24,          // larger coin
-    pegRadius: 14,           // larger pegs
-    pegRestitution: 0.86,    // bounciness on pegs
-    wallRestitution: 0.7,
-    floorRestitution: 0.35,
-    maxPegRows: 12,          // more rows for bigger board
-    pegXSpacing: 100,         // more spacing
-    pegYSpacing: 100,
-    leftPadding: 68,
-    topPadding: 180,
-    jarWidth: 90,           // larger jar
-    jarMouthWidth: 70,
-    jarHeight: 80,
-    jarThick: 10,
-    coinsPerGame: 10,
-    jarScore: 15,
-    rentGoal: 120,
-    aimSpeed: 700,           // faster aim for bigger board
-    pegEmoji: ["🍕","💸","😼","🍕","💸","😼"],
-    streakBonus: [0, 0, 2, 5, 10, 15], // bonus for consecutive hits
-    missShake: 7,
-    hitConfetti: 55,
-    maxCoinsOnScreen: 1
-  };
+  gravity: 1700,           // px/s^2
+  air: 0.000,              // air drag per second
+  coinRadius: 12,          // smaller coin for more space
+  pegRadius: 7,            // smaller pegs
+  pegRestitution: 0.86,    // bounciness on pegs
+  wallRestitution: 0.7,
+  floorRestitution: 0.35,
+  maxPegRows: 7,           // fits well in 540px height
+  pegXSpacing: 38,         // enough space for coin to pass
+  pegYSpacing: 54,         // vertical space between rows
+  leftPadding: 30,         // space from left edge
+  topPadding: 80,          // space from top (leaves room for character)
+  jarWidth: 70,            // fits at bottom
+  jarMouthWidth: 54,       // mouth is a bit smaller than jar
+  jarHeight: 60,           // fits at bottom
+  jarThick: 8,             // jar wall thickness
+  coinsPerGame: 10,
+  jarScore: 15,
+  rentGoal: 120,
+  aimSpeed: 550,
+  pegEmoji: ["🍕","💸","😼","🍕","💸","😼"],
+  streakBonus: [0, 0, 2, 5, 10, 15],
+  missShake: 7,
+  hitConfetti: 55,
+  maxCoinsOnScreen: 1
+};
 
   // ====== DOM ======
   const canvas = document.getElementById("game");
@@ -553,10 +553,11 @@ canvas {
     drawBackdrop();
 
     // Draw character image above the board, following aim
-    const charWidth = 120, charHeight = 140, charY = 10;
-    if (characterImg.complete) {
-      ctx.drawImage(characterImg, state.aimX - charWidth/2, charY, charWidth, charHeight);
-    }
+    const charWidth = 60, charHeight = 68;
+  const minAimX = charWidth/2 + 4;
+  const maxAimX = canvas.width - charWidth/2 - 4;
+  const clampedAimX = clamp(state.aimX, minAimX, maxAimX);
+  ctx.drawImage(characterImg, clampedAimX - charWidth/2, cfg.topPadding - charHeight - 8, charWidth, charHeight);
 
     // Aim line
     drawAim();
