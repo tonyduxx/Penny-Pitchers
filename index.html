@@ -28,6 +28,28 @@
     gap:12px;
   }
 
+  .roommate-select {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .roommate-select label {
+    font-weight: 700;
+  }
+  .roommate-img {
+    display: block;
+    margin: 0 auto 8px auto;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    background: none;
+    border: none;
+    box-shadow: none;
+    pointer-events: none;
+    user-select: none;
+  }
+
   header{
     display:flex; align-items:center; justify-content:space-between; gap:12px;
   }
@@ -93,6 +115,15 @@
 </head>
 <body>
   <div class="wrap">
+    <div class="roommate-select">
+      <label for="roommate">Choose Roommate:</label>
+      <select id="roommate">
+        <option value="Danny">Danny</option>
+        <option value="Trey">Trey</option>
+        <option value="Black">Black</option>
+      </select>
+    </div>
+    <img id="roommateImg" class="roommate-img" src="png/Danny.png" alt="Roommate" />
     <header>
       <h1>🪙 Rent Due <span class="tag">Coin Flip Frenzy</span></h1>
       <div class="controls">
@@ -123,6 +154,19 @@
   </div>
 
   <div class="watermark">RENT DUE • Ms. Bertha is watching 👀</div>
+
+<script>
+  // Roommate selection logic
+  const roommateSelect = document.getElementById('roommate');
+  const roommateImg = document.getElementById('roommateImg');
+  const roommates = {
+    Danny: 'png/Danny.png',
+    Trey: 'png/Trey.png',
+    Black: 'png/Black.png'
+  };
+  roommateSelect.addEventListener('change', function() {
+    roommateImg.src = roommates[this.value];
+  });
 
 <script>
 (() => {
